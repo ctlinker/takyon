@@ -10,7 +10,7 @@ Just **images, mounts, and control.**
 
 ---
 
-## ✨ Concept
+## Concept
 
 Takyon treats environments as **first-class filesystem objects**:
 
@@ -45,7 +45,7 @@ This means:
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 git clone https://github.com/yourname/takyon
@@ -56,7 +56,7 @@ sudo mv takyon /usr/local/bin/
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Create a container
 
@@ -181,7 +181,7 @@ It’s closer to **Arch + chroot + namespaces** than to Docker.
 
 ---
 
-## 🧠 Why Takyon?
+## Why Takyon?
 
 Because sometimes you don’t want:
 
@@ -194,7 +194,7 @@ You just want:
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 Takyon is experimental.
 You are working directly with filesystems and mounts.
@@ -203,7 +203,7 @@ Break things. Learn things. Fix them.
 
 ---
 
-## 🧃 Closing note
+## Closing note
 
 Takyon sits in a strange place:
 
