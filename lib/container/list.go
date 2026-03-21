@@ -1,6 +1,7 @@
 package container
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"takyon/lib/env"
@@ -40,19 +41,43 @@ func ListContainers() {
 
 	ui.Info("Containers in %s:", store)
 	for _, entry := range entries {
-		if !entry.IsDir() {
-			name := strings.TrimSuffix(entry.Name(), ".img")
-			state := "idle"
-			mount := GetImageMount(entry.Name())
-
-			if IsMounted(name) {
-				state = "mounted"
-			} else if IsCorrupted(name) {
-				state = "error"
-			}
-
-			// assuming images are files, not directories
-			ui.Step("Container: %-20s State: %-10s Mount: %s", name, state, mount)
+		if entry.IsDir() {
+			continue
 		}
+
+		name := strings.TrimSuffix(entry.Name(), ".img")
+		state := "idle"
+		mount := GetImageMount(entry.Name())
+		size := "unknown"
+
+		if imgInfo, err := entry.Info(); err == nil {
+			size = formatSize(imgInfo.Size())
+		} else {
+			ui.Warn("Failed to retrieve size for %s: %v", name, err)
+		}
+
+		if IsMounted(name) {
+			state = "mounted"
+		} else if IsCorrupted(name) {
+			state = "error"
+		}
+
+		ui.Step(
+			"Container: %-20s State: %-10s Size: %-10s Mount: %s",
+			name, state, size, mount,
+		)
 	}
+}
+
+func formatSize(size int64) string {
+	const unit = 1024
+	if size < unit {
+		return fmt.Sprintf("%d B", size)
+	}
+	div, exp := int64(unit), 0
+	for n := size / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(size)/float64(div), "KMGTPE"[exp])
 }
