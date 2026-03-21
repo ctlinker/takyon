@@ -34,7 +34,7 @@ func FlashContainer(containerName, distro string) error {
 	case "minimal-arch":
 		cmd = cutils.MkCommand("pacstrap", mountpoint, "base")
 	case "arch":
-		cmd = cutils.MkCommand("pacstrap", mountpoint, "base bash coreutils fastfetch nano git sudo")
+		cmd = cutils.MkCommand("pacstrap", mountpoint, "base", "bash", "coreutils", "iw", "fastfetch", "nano", "neovim", "git", "sudo")
 	default:
 		return fmt.Errorf("unsupported distro: %s", distro)
 	}
