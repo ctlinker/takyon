@@ -2,8 +2,6 @@ package container
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 )
@@ -58,7 +56,7 @@ exec chroot --userspec %s %s %s
 		param.Shell,
 	)
 
-	cmd := exec.Command(
+	cmd := cutils.MkTTYCommand(
 		"unshare",
 		"--mount",
 		"--pid",
@@ -66,12 +64,7 @@ exec chroot --userspec %s %s %s
 		"--mount-proc",
 		"bash",
 		"-c",
-		script,
-	)
-
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+		script)
 
 	if err := cmd.Run(); err != nil {
 		ui.Warn("Failed to enter disk image")

@@ -2,7 +2,6 @@ package container
 
 import (
 	"fmt"
-	"os/exec"
 	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 )
@@ -27,7 +26,7 @@ func CreateDiskImage(param CreateDiskImageOption) error {
 	ui.Step("Creating disk image: %s (%dMB, %s)", param.Name, param.Size, param.Format)
 
 	// truncate file
-	truncErr := exec.Command("truncate", "-s", fmt.Sprintf("%dM", param.Size), imgPath).Run()
+	truncErr := cutils.Run("truncate", "-s", fmt.Sprintf("%dM", param.Size), imgPath)
 	if truncErr != nil {
 		ui.Error("Failed to allocate disk image %s: %v", imgPath, truncErr)
 		return truncErr
@@ -37,7 +36,7 @@ func CreateDiskImage(param CreateDiskImageOption) error {
 
 	// mkfs
 	mkfsCmd := fmt.Sprintf("mkfs.%s", param.Format)
-	mkfsErr := exec.Command(mkfsCmd, imgPath).Run()
+	mkfsErr := cutils.Run(mkfsCmd, imgPath)
 	if mkfsErr != nil {
 		ui.Error("Failed to format disk image %s: %v", imgPath, mkfsErr)
 		return mkfsErr

@@ -62,15 +62,12 @@ type growDiskImageOption struct {
 func growDiskImage(param growDiskImageOption) error {
 
 	ui.Step("Re Truncating disk image")
-	tr_err := exec.Command("truncate", "-s", param.Size, param.Image).Run()
+	tr_err := cutils.Run("truncate", "-s", param.Size, param.Image)
 	if tr_err != nil {
 		ui.Warn("Failed to re truncate image %s to %s", param.Image, param.Size)
 	}
 
-	e2_cmd := exec.Command("e2fsck", "-f", "-p", param.Image)
-	e2_cmd.Stdin = os.Stdin
-	e2_cmd.Stdout = os.Stdout
-	e2_cmd.Stderr = os.Stderr
+	e2_cmd := cutils.MkTTYCommand("e2fsck", "-f", "-p", param.Image)
 
 	ui.Step("Checking disk image filesystem health")
 	if err := e2_cmd.Run(); err != nil {
@@ -89,7 +86,7 @@ func growDiskImage(param growDiskImageOption) error {
 	}
 
 	ui.Step("Expending disk image filesystem")
-	re2fs_err := exec.Command("resize2fs", param.Image).Run()
+	re2fs_err := cutils.Run("resize2fs", param.Image)
 	if re2fs_err != nil {
 		ui.Warn("Failed to extend disk filesystem; Are you root ?")
 		return re2fs_err

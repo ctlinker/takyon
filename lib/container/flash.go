@@ -21,7 +21,7 @@ func FlashContainer(containerName, distro string) error {
 	var cmd *exec.Cmd
 	switch distro {
 	case "kali":
-		cmd = exec.Command(
+		cmd = cutils.MkCommand(
 			"debootstrap",
 			"--arch=amd64",
 			"--variant=minbase",
@@ -30,11 +30,11 @@ func FlashContainer(containerName, distro string) error {
 			"http://http.kali.org/kali",
 		)
 	case "debian", "ubuntu":
-		cmd = exec.Command("debootstrap", "--arch=amd64", "bookworm", mountpoint, "http://deb.debian.org/debian")
+		cmd = cutils.MkCommand("debootstrap", "--arch=amd64", "bookworm", mountpoint, "http://deb.debian.org/debian")
 	case "minimal-arch":
-		cmd = exec.Command("pacstrap", mountpoint, "base")
+		cmd = cutils.MkCommand("pacstrap", mountpoint, "base")
 	case "arch":
-		cmd = exec.Command("pacstrap", mountpoint, "base bash coreutils fastfetch nano git sudo")
+		cmd = cutils.MkCommand("pacstrap", mountpoint, "base bash coreutils fastfetch nano git sudo")
 	default:
 		return fmt.Errorf("unsupported distro: %s", distro)
 	}

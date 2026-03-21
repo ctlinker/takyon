@@ -3,7 +3,6 @@ package container
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
@@ -31,7 +30,7 @@ func MountDiskImage(containerName string) error {
 	}
 
 	ui.Step("Mounting container %s", containerName)
-	if err := exec.Command("mount", "-o", "loop", image, mountpoint).Run(); err != nil {
+	if err := cutils.Run("mount", "-o", "loop", image, mountpoint); err != nil {
 		ui.Error("Failed to mount container: %v", err)
 		return err
 	}
@@ -52,7 +51,7 @@ func MountDiskImage(containerName string) error {
 
 	if !utils.FileExists(img_resolv) && utils.FileExists(host_resolv) {
 		ui.Step("Inheriting host's /etc/resolv.conf file")
-		err := exec.Command("cp", host_resolv, img_resolv).Run()
+		err := cutils.Run("cp", host_resolv, img_resolv)
 		if err != nil {
 			ui.Warn("Failed to inherit %s, manualy write it to your image or you may not have access to internet", host_resolv)
 		}
@@ -71,17 +70,15 @@ func UmountDiskImage(containerName string) error {
 	}
 
 	ui.Step("Umounting mountpoint directory: %s", mountpoint)
-	err := exec.Command("umount", "-R", mountpoint).Run()
-	if err != nil {
+	if err := cutils.Run("umount", "-R", mountpoint); err != nil {
 		ui.Error("Failed to umount mountpoint: %v", mountpoint)
 		return err
 	}
 
 	ui.Step("Removing mountpoint directory: %s", mountpoint)
-	rm_err := os.RemoveAll(mountpoint)
-	if rm_err != nil {
+	if rm_err := os.RemoveAll(mountpoint); rm_err != nil {
 		ui.Warn("Failed removet mountpoint directory: %v", mountpoint)
-		return err
+		return rm_err
 	}
 
 	ui.Success("Container %s umounted successfully", containerName)
