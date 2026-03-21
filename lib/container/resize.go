@@ -16,12 +16,12 @@ type ResizeDiskImageOption struct {
 
 func ResizeDiskImage(param ResizeDiskImageOption) error {
 
-	if !ImageExist(param.Name) {
+	if !cutils.ImageExist(param.Name) {
 		ui.Warn("No container of this name could be found")
 		return ui.AbortErr
 	}
 
-	if IsMounted(param.Name) {
+	if cutils.IsMounted(param.Name) {
 		ui.Warn("Container %s is currently mounted", param.Name)
 		return ui.AbortErr
 	}
@@ -31,7 +31,7 @@ func ResizeDiskImage(param ResizeDiskImageOption) error {
 		return ui.AbortErr
 	}
 
-	image_path := GetImagePath(param.Name)
+	image_path := cutils.GetImagePath(param.Name)
 	info, _ := os.Stat(image_path)
 
 	new_size := fmt.Sprintf("%d%s", param.Size, param.Unit)

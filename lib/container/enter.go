@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 )
 
@@ -20,19 +21,19 @@ func EnterContainer(param EnterContainerOption) error {
 		return ui.AbortErr
 	}
 
-	if !ImageExist(param.Name) {
+	if !cutils.ImageExist(param.Name) {
 		ui.Warn("Container %s does not exists", param.Name)
 		return ui.AbortErr
 	}
 
-	if !IsMounted(param.Name) {
+	if !cutils.IsMounted(param.Name) {
 		err := MountDiskImage(param.Name)
 		if err != nil {
 			return err
 		}
 	}
 
-	mount_path := GetImageMount(param.Name)
+	mount_path := cutils.GetImageMount(param.Name)
 
 	ui.Step("Entering chroot as %s", param.User)
 

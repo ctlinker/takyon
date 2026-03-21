@@ -1,9 +1,9 @@
 package container
 
 import (
-	"fmt"
 	"os"
 	"strings"
+	"takyon/lib/container/cutils"
 	"takyon/lib/env"
 	"takyon/lib/ui"
 )
@@ -47,18 +47,18 @@ func ListContainers() {
 
 		name := strings.TrimSuffix(entry.Name(), ".img")
 		state := "idle"
-		mount := GetImageMount(entry.Name())
+		mount := cutils.GetImageMount(entry.Name())
 		size := "unknown"
 
 		if imgInfo, err := entry.Info(); err == nil {
-			size = formatSize(imgInfo.Size())
+			size = cutils.FormatSize(imgInfo.Size())
 		} else {
 			ui.Warn("Failed to retrieve size for %s: %v", name, err)
 		}
 
-		if IsMounted(name) {
+		if cutils.IsMounted(name) {
 			state = "mounted"
-		} else if IsCorrupted(name) {
+		} else if cutils.IsCorrupted(name) {
 			state = "error"
 		}
 
@@ -67,17 +67,4 @@ func ListContainers() {
 			name, state, size, mount,
 		)
 	}
-}
-
-func formatSize(size int64) string {
-	const unit = 1024
-	if size < unit {
-		return fmt.Sprintf("%d B", size)
-	}
-	div, exp := int64(unit), 0
-	for n := size / unit; n >= unit; n /= unit {
-		div *= unit
-		exp++
-	}
-	return fmt.Sprintf("%.1f %cB", float64(size)/float64(div), "KMGTPE"[exp])
 }

@@ -3,6 +3,7 @@ package container
 import (
 	"fmt"
 	"os/exec"
+	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 )
 
@@ -13,15 +14,15 @@ type CreateDiskImageOption struct {
 }
 
 func CreateDiskImage(param CreateDiskImageOption) error {
-	if ImageExist(param.Name) {
+	if cutils.ImageExist(param.Name) {
 		return fmt.Errorf("container %s already exists", param.Name)
 	}
 
-	if !IsSupportedDiskFormat(param.Format) {
+	if !cutils.IsSupportedDiskFormat(param.Format) {
 		return fmt.Errorf("unsupported disk format: %s", param.Format)
 	}
 
-	imgPath := GetImagePath(param.Name)
+	imgPath := cutils.GetImagePath(param.Name)
 
 	ui.Step("Creating disk image: %s (%dMB, %s)", param.Name, param.Size, param.Format)
 

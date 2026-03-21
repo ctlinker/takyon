@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 )
 
 func FlashContainer(containerName, distro string) error {
-	mountpoint := GetImageMount(containerName)
+	mountpoint := cutils.GetImageMount(containerName)
 
 	ui.Step("Bootstrapping container %s (%s)", containerName, distro)
 
-	if !IsMounted(containerName) {
+	if !cutils.IsMounted(containerName) {
 		ui.Error("Constainer %s is not mounted", containerName)
 		return fmt.Errorf("aborting operation")
 	}

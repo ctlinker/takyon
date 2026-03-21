@@ -5,20 +5,21 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"takyon/lib/container/cutils"
 	"takyon/lib/ui"
 	"takyon/lib/utils"
 )
 
 func MountDiskImage(containerName string) error {
-	image := GetImagePath(containerName)
-	mountpoint := GetImageMount(containerName)
+	image := cutils.GetImagePath(containerName)
+	mountpoint := cutils.GetImageMount(containerName)
 
 	if !utils.FileExists(image) {
 		ui.Error("Container image %s does not exist", containerName)
 		return fmt.Errorf("aborting operation")
 	}
 
-	if IsMounted(containerName) {
+	if cutils.IsMounted(containerName) {
 		ui.Warn("Container %s is already mounted at %s", containerName, mountpoint)
 		return fmt.Errorf("aborting operation")
 	}
@@ -62,9 +63,9 @@ func MountDiskImage(containerName string) error {
 }
 
 func UmountDiskImage(containerName string) error {
-	mountpoint := GetImageMount(containerName)
+	mountpoint := cutils.GetImageMount(containerName)
 
-	if !IsMounted(containerName) {
+	if !cutils.IsMounted(containerName) {
 		ui.Warn("Container %s is not mounted at", containerName)
 		return ui.AbortErr
 	}
