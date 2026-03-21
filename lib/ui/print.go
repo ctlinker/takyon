@@ -38,3 +38,5 @@ func Step(msg string, args ...any) {
 func Warn(msg string, args ...any) {
 	fmt.Printf(yellow+"[?] "+msg+reset+"\n", args...)
 }
+
+var AbortErr = fmt.Errorf("aborting operation")

@@ -30,8 +30,10 @@ func FlashContainer(containerName, distro string) error {
 		)
 	case "debian", "ubuntu":
 		cmd = exec.Command("debootstrap", "--arch=amd64", "bookworm", mountpoint, "http://deb.debian.org/debian")
-	case "arch":
+	case "minimal-arch":
 		cmd = exec.Command("pacstrap", mountpoint, "base")
+	case "arch":
+		cmd = exec.Command("pacstrap", mountpoint, "base bash coreutils fastfetch nano git sudo")
 	default:
 		return fmt.Errorf("unsupported distro: %s", distro)
 	}
