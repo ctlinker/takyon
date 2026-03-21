@@ -22,7 +22,7 @@ func main() {
 	rootCmd.AddCommand(command.MountCMD)
 	rootCmd.AddCommand(command.FlashCMD)
 	rootCmd.AddCommand(command.EnterCMD)
-
+	rootCmd.AddCommand(command.UmountCMD)
 	env.SetupDir()
 
 	// run CLI

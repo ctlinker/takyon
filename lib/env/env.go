@@ -43,8 +43,8 @@ func SetupDir() error {
 	}
 
 	for _, d := range dirs {
-		ui.Step("Ensuring directory exists: %s", d)
 		if err := os.MkdirAll(d, 0755); err != nil {
+			ui.Step("Ensuring directory exists: %s", d)
 			ui.Error("Failed to create directory %s: %v", d, err)
 			return err
 		}

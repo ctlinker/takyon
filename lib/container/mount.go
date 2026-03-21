@@ -60,3 +60,29 @@ func MountDiskImage(containerName string) error {
 	ui.Success("Container %s mounted at %s", containerName, mountpoint)
 	return nil
 }
+
+func UmountDiskImage(containerName string) error {
+	mountpoint := GetImageMount(containerName)
+
+	if !IsMounted(containerName) {
+		ui.Warn("Container %s is not mounted at", containerName)
+		return ui.AbortErr
+	}
+
+	ui.Step("Umounting mountpoint directory: %s", mountpoint)
+	err := exec.Command("umount", "-R", mountpoint).Run()
+	if err != nil {
+		ui.Error("Failed to umount mountpoint: %v", mountpoint)
+		return err
+	}
+
+	ui.Step("Removing mountpoint directory: %s", mountpoint)
+	rm_err := os.RemoveAll(mountpoint)
+	if rm_err != nil {
+		ui.Warn("Failed removet mountpoint directory: %v", mountpoint)
+		return err
+	}
+
+	ui.Success("Container %s umounted successfully", containerName)
+	return nil
+}
