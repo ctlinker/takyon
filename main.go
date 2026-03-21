@@ -16,6 +16,8 @@ func main() {
 		Short: "Takyon container manager",
 	}
 
+	env.SetupDir()
+
 	// attach subcommands
 	rootCmd.AddCommand(command.CreateCMD)
 	rootCmd.AddCommand(command.ListCMD)
@@ -23,7 +25,7 @@ func main() {
 	rootCmd.AddCommand(command.FlashCMD)
 	rootCmd.AddCommand(command.EnterCMD)
 	rootCmd.AddCommand(command.UmountCMD)
-	env.SetupDir()
+	rootCmd.AddCommand(command.ResizeCMD)
 
 	// run CLI
 	if err := rootCmd.Execute(); err != nil {
