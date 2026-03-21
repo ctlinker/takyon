@@ -45,6 +45,18 @@ func MountDiskImage(containerName string) error {
 		ui.Step("Created directory %s", path)
 	}
 
+	// adding host resolv.conf
+	host_resolv := filepath.Join("/", "etc", "resolv.conf")
+	img_resolv := filepath.Join(mountpoint, "etc", "resolv.conf")
+
+	if !utils.FileExists(img_resolv) && utils.FileExists(host_resolv) {
+		ui.Step("Inheriting host's /etc/resolv.conf file")
+		err := exec.Command("cp", host_resolv, img_resolv).Run()
+		if err != nil {
+			ui.Warn("Failed to inherit %s, manualy write it to your image or you may not have access to internet", host_resolv)
+		}
+	}
+
 	ui.Success("Container %s mounted at %s", containerName, mountpoint)
 	return nil
 }
