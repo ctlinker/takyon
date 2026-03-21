@@ -39,4 +39,4 @@ func Warn(msg string, args ...any) {
 	fmt.Printf(yellow+"[?] "+msg+reset+"\n", args...)
 }
 
-var AbortErr = fmt.Errorf("aborting operation")
+var AbortErr = fmt.Errorf("Aborting operation")
