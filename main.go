@@ -29,6 +29,8 @@ func main() {
 	rootCmd.AddCommand(command.ResizeCMD)
 	rootCmd.AddCommand(command.RemoveCMD)
 	rootCmd.AddCommand(display.DisplayCMD)
+	rootCmd.AddCommand(command.ExecCMD)
+
 	// run CLI
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
