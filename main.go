@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"takyon/lib/command"
+	"takyon/lib/command/display"
 	"takyon/lib/env"
 
 	"github.com/spf13/cobra"
@@ -27,7 +28,7 @@ func main() {
 	rootCmd.AddCommand(command.UmountCMD)
 	rootCmd.AddCommand(command.ResizeCMD)
 	rootCmd.AddCommand(command.RemoveCMD)
-
+	rootCmd.AddCommand(display.DisplayCMD)
 	// run CLI
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
